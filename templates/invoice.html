@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PATEL CONSTRUCTION - Invoice #{{ invoice_no }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/invoice.css') }}">
+</head>
+<body>
+    <div class="invoice-container">
+        <div class="invoice-header">
+            <div class="company-name">PATEL CONSTRUCTION</div>
+            <div class="invoice-title">TAX INVOICE</div>
+            <div class="invoice-subtitle">(Original For Recipient)</div>
+        </div>
+        
+        <div class="invoice-info">
+            <div class="customer-info">
+                <div class="info-label"><b>To,</b></div>
+                <div class="customer-name">{{ customer_name }}</div>
+                <div class="customer-address">{{ customer_address1 }}</div>
+                <div class="customer-address">{{ customer_address2 }}</div>
+                <div class="contact-info">
+                    <span class="info-label">Contact No:</span> {{ contact_no }}
+                </div>
+                <div class="gstin-info">
+                    <span class="info-label">GSTIN:</span> {{ customer_gstin }}
+                </div>
+            </div>
+            
+            <div class="invoice-details">
+                <div class="invoice-number">
+                    <span class="info-label">Invoice No:</span> {{ invoice_no }}
+                </div>
+                <div class="invoice-date">
+                    <span class="info-label">Invoice Date:</span> {{ invoice_date }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="invoice-items">
+            <table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Item Description</th>
+                        <th>HSN/SAC</th>
+                        <th>Unit</th>
+                        <th>Qty</th>
+                        <th>Rate per Unit</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.no }}</td>
+                        <td>{{ item.description }}</td>
+                        <td>{{ item.hsn }}</td>
+                        <td>{{ item.unit }}</td>
+                        <td class="text-right">{{ "{:,.2f}".format(item.qty) }}</td>
+                        <td class="text-right">{{ "{:,.2f}".format(item.rate) }}</td>
+                        <td class="text-right">{{ "{:,.2f}".format(item.amount) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="invoice-summary">
+            <div class="amount-in-words">
+                <div class="info-label">Invoice Value in Words:</div>
+                <div class="words">INR {{ amount_in_words }}</div>
+            </div>
+            
+            <div class="totals">
+                <div class="total-row">
+                    <div class="total-label">Taxable Amount</div>
+                    <div class="total-value">{{ "{:,.2f}".format(taxable_amount) }}</div>
+                </div>
+                <div class="total-row">
+                    <div class="total-label">Add CGST(9%)</div>
+                    <div class="total-value">{{ "{:,.2f}".format(cgst) }}</div>
+                </div>
+                <div class="total-row">
+                    <div class="total-label">Add SGST(9%)</div>
+                    <div class="total-value">{{ "{:,.2f}".format(sgst) }}</div>
+                </div>
+                {% if round_off != 0 %}
+                <div class="total-row">
+                    <div class="total-label">Round Off</div>
+                    <div class="total-value">{{ "{:,.2f}".format(round_off) }}</div>
+                </div>
+                {% endif %}
+                <div class="total-row grand-total">
+                    <div class="total-label">Grand Total</div>
+                    <div class="total-value">{{ "{:,.2f}".format(grand_total) }}</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="invoice-footer">
+            <div class="company-details">
+                <div class="gstin">
+                    <span class="info-label">GSTIN:</span> 24AAQFP5768A1Z2
+                </div>
+                <div class="bank-details">
+                    <div class="bank-row">
+                        <span class="info-label">Bank & Branch:</span> {{ bank_name }}
+                    </div>
+                    <div class="bank-row">
+                        <span class="info-label">Bank A/C No.:</span> {{ account_no }}
+                    </div>
+                    <div class="bank-row">
+                        <span class="info-label">RTGS/IFSC Code:</span> {{ ifsc }}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="terms-conditions">
+                <div class="terms-header">Terms & Conditions:</div>
+                <ol>
+                    <li>Payment by Payee's A/C cheque in favour of PATEL CONSTRUCTION</li>
+                    <li>All disputes will be settled in Ahmedabad court only</li>
+                    <li>Subject to Ahmedabad jurisdiction Only. E & O. E</li>
+                </ol>
+            </div>
+            
+            <div class="signature">
+                <div class="for-text">For,</div>
+                <div class="signature-space"></div>
+                <div class="signature-text">Authorized Signatory</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
